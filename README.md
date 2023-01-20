@@ -1,6 +1,6 @@
 # metcalfes-law
 
-(Animated visualization)[https://pkcpkc.github.io/metcalfes-law/] of [Metcalfe's Law](https://en.wikipedia.org/wiki/Metcalfe%27s_law).
+[Animated visualization](https://pkcpkc.github.io/metcalfes-law/) of [Metcalfe's Law](https://en.wikipedia.org/wiki/Metcalfe%27s_law).
 
 Metcalfe's Law is related to the fact that the number of unique possible connections in a network of n nodes can be expressed mathematically as the triangular number n(n-1)/2, which is asymptotically proportional to n².
 
