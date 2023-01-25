@@ -127,6 +127,9 @@
 
         // math based on https://krazydad.com/tutorials/makecolors.php
         function findColor(depth) {
+            if (location.href.indexOf("bw") > 0) { // black and white option: I love the colorful fairy option, but sometimes love to see the circular patterns as well!
+                return "rgb(0,0,0)";
+            }
 
             const jump = 20;
             const frequency = .1;
