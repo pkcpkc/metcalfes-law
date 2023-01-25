@@ -79,6 +79,12 @@
                 let yCenter = radius;
                 radius -= PADDING;
 
+                // frame
+                context2d.beginPath();
+                context2d.arc(radius + 4, radius + 4, radius, 0, 2 * Math.PI);
+                context2d.strokeStyle = '#E0E0E0';
+                context2d.stroke();
+
                 var degree = 0;
                 let coordinates = [];
                 while (degree < 2 * Math.PI) {
@@ -86,7 +92,8 @@
                     let y = Math.floor(yCenter + Math.sin(degree) * radius);
                     coordinates.push([x, y]);
                     context2d.beginPath();
-                    context2d.arc(x, y, 3, 0, 2 * Math.PI, false);
+                    context2d.arc(x, y, 2, 0, 2 * Math.PI, false);
+                    context2d.fill();
                     context2d.stroke();
                     degree += degreeStep;
                 }
@@ -108,14 +115,37 @@
                 var count = 0;
                 connections.forEach(connection => {
                     setTimeout(function (context2d, x1, y1, x2, y2, count) {
+                        context2d.beginPath();
                         context2d.moveTo(x1, y1);
                         context2d.lineTo(x2, y2);
+                        context2d.strokeStyle = findColor(count);
                         context2d.stroke();
                         console.log("paint");
                     }, DELAY * count++, context2d, connection[0][0], connection[0][1], connection[1][0], connection[1][1], count++);
                 });
             });
         }
+
+        // math based on https://krazydad.com/tutorials/makecolors.php
+        function findColor(depth) {
+
+            const jump = 20;
+            const frequency = .1;
+            const width = 127;
+            const center = 128;
+
+            let r = 0;
+            let g = 0;
+            let b = 0;
+
+            r = Math.sin(frequency * depth + 0) * width + center;
+            g = Math.sin(frequency * depth + 2) * width + center;
+            b = Math.sin(frequency * depth + 4) * width + center;
+
+
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
     </script>
 </body>
 
