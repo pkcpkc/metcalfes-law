@@ -18,7 +18,7 @@ function addCanvas() {
     canvas.height = 100;
     document.getElementsByTagName("body")[0].insertBefore(
         canvas,
-        document.getElementsByTagName("input")[0]);
+        null);
     render();
 }
 
