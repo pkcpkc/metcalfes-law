@@ -16,9 +16,7 @@ function addCanvas() {
     let canvas = document.createElement("canvas");
     canvas.width = 100;
     canvas.height = 100;
-    document.getElementsByTagName("body")[0].insertBefore(
-        canvas,
-        null);
+    document.getElementsByTagName("body")[0].append(canvas);
     render();
 }
 
