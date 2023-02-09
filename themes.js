@@ -1,6 +1,7 @@
 const Themes = {
     RAINBOW: "🦄",
     BLACK_WHITE: "🖤",
+    GRAY: "⬜",
     supports: function (theme) { return Object.values(Themes).includes(theme); }
 };
 Object.freeze(Themes);
@@ -20,6 +21,9 @@ function findColor(depth) {
     switch (theme) {
         case Themes.BLACK_WHITE:
             return "rgb(0,0,0)";
+        case Themes.GRAY:
+            var gray = Math.abs(Math.cos(.1 * depth)) * 230;
+            return `rgb(${gray},${gray},${gray})`;
     }
 
     // Rainbow theme, math based on: https://krazydad.com/tutorials/makecolors.php
