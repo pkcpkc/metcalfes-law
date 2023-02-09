@@ -6,7 +6,7 @@
 
 Metcalfe's Law is related to the fact that the number of unique possible connections in a network of n nodes can be expressed mathematically as the triangular number n(n-1)/2, which is asymptotically proportional to n².
 
-If you love patterns more than color, there is an [option](https://pkcpkc.github.io/metcalfes-law/?bw) for you too!
+If you love patterns more than color, there is an [option](https://pkcpkc.github.io/metcalfes-law/?🖤) for you too!
 
 ## Cite from Pascal Bornet
 
