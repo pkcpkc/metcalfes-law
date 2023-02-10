@@ -42,21 +42,21 @@ function findColor(depth) {
         case Themes.PANTONE:
             var index = depth - 1 % pantone.length;
             return hexToRgb(pantone[index]);
+        default:
+            // Rainbow theme, math based on: https://krazydad.com/tutorials/makecolors.php
+            const jump = 20;
+            const frequency = .1;
+            const width = 127;
+            const center = 128;
+
+            let r = 0;
+            let g = 0;
+            let b = 0;
+
+            r = Math.sin(frequency * depth + 0) * width + center;
+            g = Math.sin(frequency * depth + 2) * width + center;
+            b = Math.sin(frequency * depth + 4) * width + center;
+
+            return `rgb(${r}, ${g}, ${b})`;
     }
-
-    // Rainbow theme, math based on: https://krazydad.com/tutorials/makecolors.php
-    const jump = 20;
-    const frequency = .1;
-    const width = 127;
-    const center = 128;
-
-    let r = 0;
-    let g = 0;
-    let b = 0;
-
-    r = Math.sin(frequency * depth + 0) * width + center;
-    g = Math.sin(frequency * depth + 2) * width + center;
-    b = Math.sin(frequency * depth + 4) * width + center;
-
-    return `rgb(${r}, ${g}, ${b})`;
 }
