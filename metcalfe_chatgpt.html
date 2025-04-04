@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metcalfe's Law Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { display: flex; justify-content: center; gap: 40px; margin-top: 20px; }
+        .network, .chart { width: 400px; }
+        svg { border: 1px solid #ccc; background: #fafafa; display: block; margin: auto; }
+        .buttons { margin-top: 10px; }
+        button { margin: 5px; padding: 10px 15px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h2>Metcalfe's Law Visualization</h2>
+
+    <div class="container">
+        <div class="network">
+            <h3>Network Graph</h3>
+            <svg id="network" width="400" height="400"></svg>
+            <div class="buttons">
+                <button onclick="addUser()">Add User</button>
+                <button onclick="removeUser()">Remove User</button>
+            </div>
+        </div>
+
+        <div class="chart">
+            <h3>Value Growth (n²)</h3>
+            <svg id="chart" width="400" height="400"></svg>
+        </div>
+    </div>
+
+    <p>Network Value: <span id="value">0</span> (proportional to n²)</p>
+
+    <script>
+        let users = 0;
+        let links = [];
+        let values = [];
+        let angleStep = 0.01;
+
+        const networkSvg = d3.select("#network");
+        const chartSvg = d3.select("#chart");
+
+        function addUser() {
+            users++;
+            updateLinks();
+            updateVisualization();
+        }
+
+        function removeUser() {
+            if (users > 0) {
+                users--;
+                updateLinks();
+                updateVisualization();
+            }
+        }
+
+        function updateLinks() {
+            links = [];
+            for (let i = 1; i <= users; i++) {
+                for (let j = i + 1; j <= users; j++) {
+                    links.push({ source: i, target: j });
+                }
+            }
+            values.push({ x: users, y: users * users });
+        }
+
+        function updateVisualization() {
+            document.getElementById("value").innerText = users * users;
+
+            // Update Network Graph
+            networkSvg.selectAll("*").remove();
+            let nodes = Array.from({ length: users }, (_, i) => ({
+                id: i + 1,
+                angle: (i / users) * Math.PI * 2, // Initial angle
+                radius: 150
+            }));
+
+            const simulation = d3.forceSimulation(nodes)
+                .force("charge", d3.forceManyBody().strength(-200))
+                .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+                .on("tick", ticked);
+
+            let link = networkSvg.selectAll(".link")
+                .data(links)
+                .enter().append("line")
+                .attr("stroke", "#999");
+
+            let node = networkSvg.selectAll(".node")
+                .data(nodes)
+                .enter().append("circle")
+                .attr("r", 10)
+                .attr("fill", "blue")
+                .call(d3.drag()
+                    .on("start", dragStarted)
+                    .on("drag", dragged)
+                    .on("end", dragEnded));
+
+            function ticked() {
+                const centerX = 200;
+                const centerY = 200;
+                nodes.forEach(d => {
+                    if (!d.fx) { // Only rotate if not dragged
+                        d.angle += angleStep;
+                        d.x = centerX + d.radius * Math.cos(d.angle);
+                        d.y = centerY + d.radius * Math.sin(d.angle);
+                    }
+                });
+
+                link.attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                node.attr("cx", d => d.x)
+                    .attr("cy", d => d.y);
+            }
+
+            function dragStarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragEnded(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+
+            // Update Value Chart
+            chartSvg.selectAll("*").remove();
+            let xScale = d3.scaleLinear().domain([0, Math.max(10, users)]).range([40, 380]);
+            let yScale = d3.scaleLinear().domain([0, Math.max(100, users * users)]).range([380, 20]);
+
+            chartSvg.append("g")
+                .attr("transform", "translate(0,380)")
+                .call(d3.axisBottom(xScale).ticks(5));
+
+            chartSvg.append("g")
+                .attr("transform", "translate(40,0)")
+                .call(d3.axisLeft(yScale));
+
+            chartSvg.selectAll(".point")
+                .data(values)
+                .enter().append("circle")
+                .attr("cx", d => xScale(d.x))
+                .attr("cy", d => yScale(d.y))
+                .attr("r", 5)
+                .attr("fill", "red");
+        }
+
+        updateVisualization();
+    </script>
+
+</body>
+</html>

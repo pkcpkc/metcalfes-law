@@ -25,3 +25,7 @@ Pascal Bornet [LinkedIn](https://www.linkedin.com/feed/update/urn:li:activity:69
 
 Even if there are managers, if team size get's too big, keeping the team coherence will be impossible, or in other words:
 The effort required to spread information among the team members exceeds the time available to produce in far - killing the efficiency.
+
+## Appendix 2
+
+- And then there was [ChatGPT](./metcalfe_chatgpt.html)...
